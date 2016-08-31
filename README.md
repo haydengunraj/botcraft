@@ -4,8 +4,4 @@ BotCraft is a Kik bot which retrieves Minecraft crafting recipes based on user i
 The bot runs on the Flask framework and is hosted on OpenShift (https://www.openshift.com/). All crafting images are © Mojang and used in accordance with the Minecraft End User License Agreement (https://account.mojang.com/documents/minecraft_eula).
 
 ## Usage
-<<<<<<< HEAD
 To use the bot, send a message to BotCraft with the name of the item you wish to craft. BotCraft will then send back an image, GIF, list of suggestions, or error. Alternatively, the bot can be mentioned in a conversation to invoke the same response (e.g. @botcraft wood slabs).
-=======
-To use the bot, send a message to BotCraft with the name of the item you wish to craft. BotCraft will then send back an image, GIF, list of suggestions, or error. Alternatively, the bot can be mentioned in a conversation to invoke the same response (e.g. @botcraft wood slabs).
->>>>>>> afb8fb459ac05f0db2e7076df08507e1683d834f
