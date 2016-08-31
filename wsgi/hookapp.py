@@ -24,10 +24,8 @@ def image(image_file):
 def webhook():
     expected_sig = base64.b16encode(hmac.new(settings.KIK_API_KEY.encode('utf-8'), request.data, hashlib.sha1).digest()).decode('utf-8')
     signature = request.headers.get('X-Kik-Signature')
-
     if expected_sig != signature:
         return Response(status=403)
-
     messages = request.get_json()["messages"]
     for message in messages:
         sender = message["from"]
@@ -79,6 +77,28 @@ def webhook():
                     image = {'to': sender, 'type': 'video', 'chatId': chat_id, 'videoUrl': url, 'loop': True, 'autoplay': True}
                 else:
                     image = {'to': sender, 'type': 'picture', 'chatId': chat_id, 'picUrl': url}
+                text = {'to': sender, 'type': 'text', 'chatId': chat_id, 'body': 'Send me an item name and I\'ll send you the crafting recipe.'}
+                if message["mention"] == settings.KIK_USERNAME:
+                    messages = [image]
+                else:
+                    messages = [image, text]
+                    requests.post(
+                        settings.KIK_MESSAGE_URL,
+                        auth=(settings.KIK_USERNAME, settings.KIK_API_KEY),
+                        headers={
+                            'Content-Type': 'application/json'
+                        },
+                        data=json.dumps({
+                            'messages': [
+                                {
+                                    'to': sender,
+                                    'type': 'text',
+                                    'chatId': chat_id,
+                                    'body': 'One moment please...'
+                                }
+                            ]
+                        })
+                    )
                 requests.post(
                     settings.KIK_MESSAGE_URL,
                     auth=(settings.KIK_USERNAME, settings.KIK_API_KEY),
@@ -86,32 +106,7 @@ def webhook():
                         'Content-Type': 'application/json'
                     },
                     data=json.dumps({
-                        'messages': [
-                            {
-                                'to': sender,
-                                'type': 'text',
-                                'chatId': chat_id,
-                                'body': 'One moment please...'
-                            }
-                        ]
-                    })
-                )
-                requests.post(
-                    settings.KIK_MESSAGE_URL,
-                    auth=(settings.KIK_USERNAME, settings.KIK_API_KEY),
-                    headers={
-                        'Content-Type': 'application/json'
-                    },
-                    data=json.dumps({
-                        'messages': [
-                            image,
-                            {
-                                'to': sender,
-                                'type': 'text',
-                                'chatId': chat_id,
-                                'body': 'Send me an item name and I\'ll send you the crafting recipe.'
-                            }
-                        ]
+                        'messages': messages
                     })
                 )
             elif len(matches) > 20:
