@@ -44,7 +44,7 @@ def webhook():
                             'to': sender,
                             'type': 'text',
                             'chatId': chat_id,
-                            'body': 'Hi, I\'m BotCraft! Send me an item name and I\'ll send you the crafting recipe.'
+                            'body': 'Hi, I\'m Crafty! Send me an item name and I\'ll send you the crafting recipe.'
                         }
                     ]
                 })
